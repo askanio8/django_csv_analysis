@@ -1,0 +1,94 @@
+[tool.poetry]
+name = "django-csv-analysis"
+version = "0.1.0"
+description = ""
+authors = ["anatoly <askanio8@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.6"
+
+[[tool.poetry-auto-export.exports]]
+# https://github.com/Ddedalus/poetry-auto-export
+output = "requirements.txt"
+without = ["dev"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+
+
+[tool.ruff]
+line-length = 120
+
+extend-exclude = [
+]
+
+[tool.ruff.lint]
+extend-select = [
+    "ALL",
+]
+extend-ignore = [
+    # Missing docstring.
+    "D1",
+    # flake8-future-annotations.
+    "FA",
+    # Missing type annotation for self and cls.
+    "ANN1",
+    # f-strings to format logging messages.
+    "G004",
+    # Consider {expression} instead of string join.
+    "FLY002",
+    # TODO: Remove after this will be implemented in MyPy.
+    # Type alias {name} uses TypeAlias annotation instead of the type keyword
+    "UP040",
+    # TODOs
+    # Author.
+    "TD002",
+    # Link to issue
+    "TD003",
+    # Line contains a TODO or related comment
+    "FIX",
+    # Args and kwargs are not used and not annotated
+    "ANN002",
+    "ANN003",
+    # Order of model's fields, etc.
+    "DJ012",
+    # Found commented-out code.
+    "ERA001",
+]
+
+task-tags = [
+    "TODO",
+    "FIXME",
+    "HACK",
+    "XXX",
+    "[",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+# https://betterprogramming.pub/3-different-docstring-formats-for-python-d27be81e0d68
+
+[tool.ruff.lint.flake8-comprehensions]
+allow-dict-calls-with-keyword-arguments = true
+
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = [
+    # Unused import.
+    "F401",
+]
+
+"*/migrations/*.py" = [
+    # Mutable class attributes should be annotated with `typing.ClassVar`.
+    "RUF012",
+]
+
+[tool.djlint]
+# H006: img must have width and height attributes
+ignore="H006"
