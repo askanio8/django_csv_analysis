@@ -1,0 +1,63 @@
+version: "3.8"
+
+volumes:
+  postgres_data: {}
+
+services:
+  app:
+    build: .
+
+    depends_on:
+      postgres:
+        # https://docs.docker.com/compose/compose-file/05-services/#long-syntax-1:
+        # TODO: Rework to healthcheck
+        condition: service_healthy
+
+    profiles:
+      - full_dev
+
+    command: /start.sh
+
+  postgres:
+    image: postgres:16.2-alpine3.19
+
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready --username ${POSTGRES_USER}  --dbname ${POSTGRES_DB}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:rw
+
+    profiles:
+      - full_dev
+      - local_dev
+
+  #  pgadmin:
+  #    image: dpage/pgadmin4:8.6
+  #
+  #    environment:
+  #      # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
+  #      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL:-admin@mail.com}"
+  #      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD:-admin123}"
+  #
+  #    ports:
+  #      - "45050:80"
+  #
+  #    depends_on:
+  #      postgres:
+  #        condition: service_healthy
+  #
+  #    profiles:
+  #      - full_dev
+  #      - local_dev

@@ -1,10 +1,7 @@
 # Ignore all
-**
+django_csv_analysis/asgi.py
 
 # Exclude
-!core
-!apps
 !manage.py
 !requirements.txt
-!docker/app
 !Makefile
