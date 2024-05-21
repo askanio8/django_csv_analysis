@@ -6,12 +6,12 @@ authors = ["anatoly <askanio8@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.10,<3.13"
 django = "^5.0.6"
 pre-commit = "^3.7.1"
 black = "^24.4.2"
-pandas = "^2.2.2"
-matplotlib = "^3.9.0"
+setuptools = "^70.0.0"
+ydata-profiling = "^4.8.3"
 
 [[tool.poetry-auto-export.exports]]
 # https://github.com/Ddedalus/poetry-auto-export

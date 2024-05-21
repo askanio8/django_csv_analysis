@@ -27,8 +27,20 @@
                         style="background-color: #c9ddc4">Next</button>
             </div>
             <button type="button"
+                    id="openReportButton"
                     class="btn btn-sm btn-outline-secondary"
-                    style="background-color: #c9ddc4">Extended</button>
+                    style="background-color: #c9ddc4">Extended report</button>
+            <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const ydata_html = "{{ ydata_html }}"; // Используем переменную Django
+
+        document
+          .getElementById("openReportButton")
+          .addEventListener("click", function () {
+            window.open(ydata_html, "_blank");
+          });
+      });
+            </script>
         </div>
     </div>
     <script>

@@ -2,9 +2,6 @@ import pandas as pd
 
 
 def get_table(df: pd.DataFrame) -> pd.DataFrame:
-    # Загрузка CSV в DataFrame
-    # df = pd.read_csv(file)
-
     first_5 = df.head(5)
 
     # Получение последних 5 записей
