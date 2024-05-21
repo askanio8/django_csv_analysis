@@ -1,15 +1,9 @@
-import os
-
 import pandas as pd
 
 
-def get_table(path: str) -> pd.DataFrame:
-    current_file_path = os.path.abspath(__file__)
-    current_dir_path = os.path.dirname(current_file_path)
-    path = os.path.join(current_dir_path, "products.csv")
-
+def get_table(df: pd.DataFrame) -> pd.DataFrame:
     # Загрузка CSV в DataFrame
-    df = pd.read_csv(path)
+    # df = pd.read_csv(file)
 
     first_5 = df.head(5)
 

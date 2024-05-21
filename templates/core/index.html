@@ -1,25 +1,81 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block graphs %}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h4 class="h4">Graph</h4>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="myFile"
+                   class="custom-file-label btn btn-sm btn-outline-secondary"
+                   style="background-color: #c9ddc4">
+                Upload file
+                <input type="file"
+                       id="myFile"
+                       name="filename"
+                       class="custom-file-input"
+                       onchange="this.form.submit();" />
+            </label>
+        </form>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
                 <button type="button"
+                        id="prevButton"
                         class="btn btn-sm btn-outline-secondary"
                         style="background-color: #c9ddc4">Previous</button>
                 <button type="button"
+                        id="nextButton"
                         class="btn btn-sm btn-outline-secondary"
                         style="background-color: #c9ddc4">Next</button>
             </div>
             <button type="button"
                     class="btn btn-sm btn-outline-secondary"
-                    style="background-color: #c9ddc4">Save</button>
+                    style="background-color: #c9ddc4">Extended</button>
         </div>
     </div>
-    <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+    <script>
+  document.addEventListener("DOMContentLoaded", function() {
+      let currentIndex = 0;
+      const graphs = {{ graphs_list|safe }};
+      const imgElement = document.getElementById("graphImage");
+
+      function updateImage() {
+          imgElement.src = graphs[currentIndex];
+      }
+
+      document.getElementById("prevButton").addEventListener("click", function() {
+          if (currentIndex > 0) {
+              currentIndex--;
+              updateImage();
+          }
+      });
+
+      document.getElementById("nextButton").addEventListener("click", function() {
+          if (currentIndex < graphs.length - 1) {
+              currentIndex++;
+              updateImage();
+          }
+      });
+
+      // Инициализация первого изображения
+      updateImage();
+  });
+    </script>
+    {% if graphs_list %}
+        <div style="text-align: center; margin-top: 10px">
+            <img id="graphImage"
+                 src=""
+                 alt="Graph"
+                 class="img-fluid"
+                 style="display: block;
+                        margin-left: auto;
+                        margin-right: auto" />
+        </div>
+    {% else %}
+        <div style="text-align: center; margin-top: 10px">
+            <p>No graphs available.</p>
+        </div>
+    {% endif %}
 {% endblock %}
 {% block table %}
-    <h4>Table</h4>
     <div class="table-responsive small">
         <table class="table table-striped table-sm">
             <thead>
@@ -37,3 +93,4 @@
         </table>
     </div>
 {% endblock table %}
+<script src="{% static 'core/js/graphs.js' %}"></script>
