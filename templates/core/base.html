@@ -25,17 +25,22 @@
         <link href="{% static '/core/css/dashboard.css' %}" rel="stylesheet" />
     </head>
     <body style="background-color: #f4f7d8">
-        <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow"
-                data-bs-theme="dark">
-            <div class="offset-md-1">
-                <img src="{% static 'core/images/icon.ico' %}"
-                     alt="icon"
-                     width="40"
-                     height="40"
-                     style="margin-left: 20px" />
+
+        <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
+            <div class="offset-md-1 d-flex align-items-center">
+                <img src="{% static 'core/images/icon.ico' %}" alt="icon" width="40" height="40" style="margin-left: 20px" />
                 <a class="navbar-brand px-3 fs-6 text-white" href="#">CSV Analysis</a>
             </div>
+            <div class="ms-auto d-flex align-items-center" style="margin-right: 115px;">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-secondary text-white me-2">Logout</a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-sm btn-outline-secondary text-white me-2">Register</a>
+                    <a href="{% url 'login' %}" class="btn btn-sm btn-outline-secondary text-white me-2">Login</a>
+                {% endif %}
+            </div>
         </header>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="sidebar border border-right col-md-1 col-lg-1 p-0 bg-body-tertiary"></div>
