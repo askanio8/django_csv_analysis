@@ -1,5 +1,8 @@
 from django import forms
+from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.shortcuts import redirect
+
 from .models import CustomUser
 
 
@@ -23,6 +26,11 @@ class RegisterForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
 
 
 class LoginForm(AuthenticationForm):
