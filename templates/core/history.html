@@ -6,13 +6,15 @@
             <tbody>
                 {% for record in upload_records %}
                     <tr>
-                        <td style="background-color: #f4f7d8">{{ record.uploaded_at|date:"d.m.Y H:i" }}</td>
-                        <td style="background-color: #f4f7d8">{{ record.filename }}</td>
-                        <td style="background-color: #f4f7d8">
+                        <td>{{ record.uploaded_at|date:"d.m.Y H:i" }}</td>
+                        <td>{{ record.filename }}</td>
+                        <td>
                             <a href="{% url 'download_archive' record.id %}" class="btn btn-sm btn-outline-secondary">Download Images</a>
                         </td>
-                        <td style="background-color: #f4f7d8">
-                            <a href="{{ record.file_address.url }}" class="btn btn-sm btn-outline-secondary" target="_blank">View extended report</a>
+                        <td>
+                            {% if record.file_address %}
+                                <a href="{{ record.file_address.url }}" class="btn btn-sm btn-outline-secondary" target="_blank">View extended report</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% empty %}
@@ -23,4 +25,4 @@
             </tbody>
         </table>
     </div>
-{% endblock %}  
+{% endblock %}

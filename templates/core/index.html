@@ -26,21 +26,39 @@
                         class="btn btn-sm btn-outline-secondary"
                         style="background-color: #c9ddc4">Next</button>
             </div>
-            <button type="button"
-                    id="openReportButton"
-                    class="btn btn-sm btn-outline-secondary"
-                    style="background-color: #c9ddc4">Extended report</button>
-            <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const ydata_html = "{{ ydata_html }}"; // Используем переменную Django
+        <button type="button" id="create-report-btn" class="btn btn-sm btn-outline-secondary" style="background-color: #c9ddc4">Create report</button>
 
-        document
-          .getElementById("openReportButton")
-          .addEventListener("click", function () {
-            window.open(ydata_html, "_blank");
-          });
-      });
-            </script>
+        <script>
+            document.getElementById('create-report-btn').addEventListener('click', function() {
+                var button = this;
+                if (button.dataset.status === 'open') {
+                    window.open(button.dataset.reportUrl, '_blank');
+                    return;
+                }
+                button.innerText = 'Wait...';
+                fetch('{% url "generate_ydata_html" %}')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            alert('Error creating report: ' + data.error);
+                            button.innerText = 'Create report';
+                        } else {
+                            button.dataset.reportUrl = data.report_url;
+                            button.dataset.status = 'open';
+                            button.innerText = 'Open report';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with your fetch operation:', error);
+                        button.innerText = 'Create report';
+                    });
+            });
+        </script>
         </div>
     </div>
     <script>
@@ -92,17 +110,16 @@
         <table class="table table-striped table-sm">
             <thead>
                 <tr>
-                    {% for col in columns %}<th scope="col" style="background-color: #f4f7d8">{{ col|slice:":12" }}</th>{% endfor %}
+                    {% for col in columns %}<th scope="col">{{ col|slice:":12" }}</th>{% endfor %}
                 </tr>
             </thead>
             <tbody>
                 {% for row in table %}
                     <tr>
-                        {% for r in row %}<td style="background-color: #f4f7d8">{{ r|slice:":12" }}</td>{% endfor %}
+                        {% for r in row %}<td>{{ r|slice:":12" }}</td>{% endfor %}
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 {% endblock table %}
-<script src="{% static 'core/js/graphs.js' %}"></script>

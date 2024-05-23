@@ -90,3 +90,8 @@
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
 }
+
+table.table th,
+table.table td {
+  background-color: #f4f7d8;
+}

@@ -5,12 +5,13 @@ import tempfile
 import pandas as pd
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
 
+from django_csv_analysis import settings
 from .forms import RegisterForm, LoginForm
 from .tools.matplotlib_graphs import get_graphs
 from .tools.stats import get_table
@@ -26,6 +27,8 @@ class MyView(View):
     @staticmethod
     def post(request):
         uploaded_file = request.FILES.get("filename")
+        if not uploaded_file:
+            return render(request, "core/base.html", {"error_message": "File upload failed."})
 
         df = pd.read_csv(uploaded_file)
 
@@ -36,20 +39,42 @@ class MyView(View):
         graphs = get_graphs(df)
         graphs_list = [os.path.join(graphs, f) for f in os.listdir(graphs) if f.endswith(".png")]
 
-        ydata_html = get_html(df)
+        # Сохраняем DataFrame в сессии для последующего использования
+        request.session['df'] = df.to_json()
 
-        # Проверяем, аутентифицирован ли пользователь
+        # Проверяем, аутентифицирован ли пользователь и создаем запись в базе данных без заполнения file_address
         if request.user.is_authenticated:
-            # Создаем запись в базе данных
             upload_record = UploadRecord.objects.create(
                 user=request.user,
                 filename=uploaded_file.name,
                 folder_address=graphs,
-                file_address=os.path.basename(ydata_html)
             )
+            # Сохраняем ID записи в сессии для последующего обновления
+            request.session['upload_record_id'] = upload_record.id
 
-        context = {"table": table, "columns": columns, "graphs_list": graphs_list, "ydata_html": ydata_html}
+        context = {"table": table, "columns": columns, "graphs_list": graphs_list}
         return render(request, "core/index.html", context)
+
+    @staticmethod
+    def generate_ydata_html(request):
+        df_json = request.session.get('df')
+        if df_json is None:
+            return JsonResponse({'error': 'No data found'}, status=404)
+
+        df = pd.read_json(df_json)
+        ydata_html_path = get_html(df)
+        relative_path = os.path.relpath(ydata_html_path, settings.MEDIA_ROOT)
+        report_url = f'/media/{relative_path}'
+
+        # Обновляем запись в базе данных
+        if request.user.is_authenticated:
+            upload_record_id = request.session.get('upload_record_id')
+            if upload_record_id:
+                upload_record = UploadRecord.objects.get(id=upload_record_id)
+                upload_record.file_address = relative_path
+                upload_record.save()
+
+        return JsonResponse({'report_url': report_url})
 
 
 class RegisterUser(CreateView):
