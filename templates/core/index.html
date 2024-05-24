@@ -16,7 +16,11 @@
             </label>
         </form>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
+            <button type="button"
+                    id="create-report-btn"
+                    class="btn btn-sm btn-outline-secondary"
+                    style="background-color: #c9ddc4">Create report</button>
+            <div class="btn-group me-2" style="margin-left: 10px">
                 <button type="button"
                         id="prevButton"
                         class="btn btn-sm btn-outline-secondary"
@@ -26,10 +30,6 @@
                         class="btn btn-sm btn-outline-secondary"
                         style="background-color: #c9ddc4">Next</button>
             </div>
-            <button type="button"
-                    id="create-report-btn"
-                    class="btn btn-sm btn-outline-secondary"
-                    style="background-color: #c9ddc4">Create report</button>
         </div>
     </div>
     {% if graphs_list %}
