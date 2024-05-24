@@ -1,5 +1,4 @@
 {% extends 'core/base.html' %}
-
 {% block graphs %}
     <div class="container-fluid min-vh-100 d-flex flex-column align-items-center pt-5">
         <table class="table table-striped table-sm">
@@ -9,11 +8,16 @@
                         <td>{{ record.uploaded_at|date:"d.m.Y H:i" }}</td>
                         <td>{{ record.filename }}</td>
                         <td>
-                            <a href="{% url 'download_archive' record.id %}" class="btn btn-sm btn-outline-secondary">Download Images</a>
+                            <a href="{% url 'download_archive' record.id %}"
+                               class="btn btn-sm btn-outline-secondary"
+                               style="background-color: #c9ddc4">Download Images</a>
                         </td>
                         <td>
                             {% if record.file_address %}
-                                <a href="{{ record.file_address.url }}" class="btn btn-sm btn-outline-secondary" target="_blank">View extended report</a>
+                                <a href="{{ record.file_address.url }}"
+                                   class="btn btn-sm btn-outline-secondary"
+                                   style="background-color: #c9ddc4"
+                                   target="_blank">View extended report</a>
                             {% endif %}
                         </td>
                     </tr>

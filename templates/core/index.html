@@ -26,69 +26,12 @@
                         class="btn btn-sm btn-outline-secondary"
                         style="background-color: #c9ddc4">Next</button>
             </div>
-        <button type="button" id="create-report-btn" class="btn btn-sm btn-outline-secondary" style="background-color: #c9ddc4">Create report</button>
-
-        <script>
-            document.getElementById('create-report-btn').addEventListener('click', function() {
-                var button = this;
-                if (button.dataset.status === 'open') {
-                    window.open(button.dataset.reportUrl, '_blank');
-                    return;
-                }
-                button.innerText = 'Wait...';
-                fetch('{% url "generate_ydata_html" %}')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.error) {
-                            alert('Error creating report: ' + data.error);
-                            button.innerText = 'Create report';
-                        } else {
-                            button.dataset.reportUrl = data.report_url;
-                            button.dataset.status = 'open';
-                            button.innerText = 'Open report';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('There was a problem with your fetch operation:', error);
-                        button.innerText = 'Create report';
-                    });
-            });
-        </script>
+            <button type="button"
+                    id="create-report-btn"
+                    class="btn btn-sm btn-outline-secondary"
+                    style="background-color: #c9ddc4">Create report</button>
         </div>
     </div>
-    <script>
-  document.addEventListener("DOMContentLoaded", function() {
-      let currentIndex = 0;
-      const graphs = {{ graphs_list|safe }};
-      const imgElement = document.getElementById("graphImage");
-
-      function updateImage() {
-          imgElement.src = graphs[currentIndex];
-      }
-
-      document.getElementById("prevButton").addEventListener("click", function() {
-          if (currentIndex > 0) {
-              currentIndex--;
-              updateImage();
-          }
-      });
-
-      document.getElementById("nextButton").addEventListener("click", function() {
-          if (currentIndex < graphs.length - 1) {
-              currentIndex++;
-              updateImage();
-          }
-      });
-
-      // Инициализация первого изображения
-      updateImage();
-  });
-    </script>
     {% if graphs_list %}
         <div style="text-align: center; margin-top: 10px">
             <img id="graphImage"
@@ -104,6 +47,12 @@
             <p>No graphs available.</p>
         </div>
     {% endif %}
+    <script>
+  var createReportUrl = '{% url "generate_ydata_html" %}';
+  var graphsList = {{ graphs_list|safe }};
+    </script>
+    <script src="{% static 'core/js/create_report.js' %}"></script>
+    <script src="{% static 'core/js/graph_navigation.js' %}"></script>
 {% endblock %}
 {% block table %}
     <div class="table-responsive small">
@@ -122,4 +71,4 @@
             </tbody>
         </table>
     </div>
-{% endblock table %}
+{% endblock %}

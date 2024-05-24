@@ -1,13 +1,12 @@
-import os
 import uuid
-from typing import Any
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 
-def plot(df: pd.DataFrame, x: int, y: int, path_for_save: str) -> Any:
+def plot(df: pd.DataFrame, x: int, y: int, path_for_save: str) -> None:
     plt.figure(figsize=(10, 5), facecolor="#C9DDC4")
     ax = plt.gca()
     ax.set_facecolor("#f4f7d8")
@@ -35,8 +34,9 @@ def get_graphs(df: pd.DataFrame) -> str:
     numeric_columns = df.select_dtypes(include=np.number)
 
     # если записей много, берем только случайных 1000
-    if numeric_columns.shape[0] > 300:
-        numeric_columns = numeric_columns.sample(n=1000)
+    records_limit = 1000
+    if numeric_columns.shape[0] > records_limit:
+        numeric_columns = numeric_columns.sample(n=records_limit)
 
     n = numeric_columns.shape[1] - 1
     # уникальные пары столбцов
@@ -44,7 +44,7 @@ def get_graphs(df: pd.DataFrame) -> str:
 
     unique_id = uuid.uuid4()
     path = f"media/{unique_id}"
-    os.mkdir(path)
+    Path(path).mkdir()
     limit = min(len(unique_pairs), 30)
     for i in range(limit):
         plot(numeric_columns, unique_pairs[i][0], unique_pairs[i][1], path)
