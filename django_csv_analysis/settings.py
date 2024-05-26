@@ -8,24 +8,35 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import os.path
+import string
 from pathlib import Path
-from typing import List
+
+# noinspection PyPackageRequirements
+import environ
+from django.utils.crypto import get_random_string
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.FileAwareEnv()
+env.read_env(BASE_DIR.joinpath(".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-w^7*-bi(rx%i%m0w75e40n(l6#a25k@s7_9lwopxl=7(uj9!%0"
+SECRET_KEY = env.str(
+    "DJANGO__SECRET_KEY",
+    get_random_string(
+        64,
+        "".join([string.ascii_letters, string.digits, string.punctuation]),
+    ),
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS: List[str] = []
+ALLOWED_HOSTS: list[str] = []
 
 
 # Application definition
@@ -122,8 +133,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "core/static")
-STATICFILES_DIRS: List[str] = []
+STATIC_ROOT = Path(BASE_DIR, "core/static")
+STATICFILES_DIRS: list[str] = []
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -131,4 +142,4 @@ STATICFILES_DIRS: List[str] = []
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = Path(BASE_DIR, "media")

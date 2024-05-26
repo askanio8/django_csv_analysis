@@ -48,5 +48,5 @@ def get_graphs(df: pd.DataFrame) -> str:
     limit = min(len(unique_pairs), 30)
     for i in range(limit):
         plot(numeric_columns, unique_pairs[i][0], unique_pairs[i][1], path)
-    plt.close('all')
+    plt.close("all")
     return path

@@ -43,3 +43,6 @@ class UploadRecord(models.Model):
     filename = models.CharField(max_length=255)
     folder_address = models.CharField(max_length=255)
     file_address = models.FileField(upload_to="history/")
+
+    def __str__(self) -> str:
+        return self.filename

@@ -21,14 +21,14 @@ class RegisterForm(UserCreationForm):
         self.fields["password1"].widget.attrs.update({"class": "form-control"})
         self.fields["password2"].widget.attrs.update({"class": "form-control"})
 
-    def save(self, commit: bool = True) -> Type["CustomUser"]:
+    def save(self, commit: bool = True) -> Type["CustomUser"]:  # noqa: FBT001, FBT002
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
         if commit:
             user.save()
         return user
 
-    def form_valid(self, form) -> HttpResponseRedirect:
+    def form_valid(self, form) -> HttpResponseRedirect:  # noqa: ANN001
         user = form.save()
         login(self.request, user)
         return redirect("home")

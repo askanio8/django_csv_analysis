@@ -2,7 +2,6 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Any
 
 import pandas as pd
 from django.contrib.auth import logout
@@ -28,7 +27,7 @@ class MyView(View):
         return render(request, "core/base.html")
 
     @staticmethod
-    def post(request: HttpRequest) -> Any:
+    def post(request: HttpRequest) -> HttpResponse:
         uploaded_file = request.FILES.get("filename")
         if not uploaded_file:
             return render(request, "core/base.html", {"error_message": "File upload failed."})
@@ -40,7 +39,7 @@ class MyView(View):
         table = table.to_numpy().tolist()
 
         graphs = get_graphs(uploaded_df)
-        graphs_list = [os.path.join(graphs, f) for f in os.listdir(graphs) if f.endswith(".png")]
+        graphs_list = [os.path.join(graphs, f) for f in os.listdir(graphs) if f.endswith(".png")]  # noqa:PTH118
 
         # Сохраняем DataFrame в сессии для последующего использования
         request.session["df"] = uploaded_df.to_json()
@@ -89,7 +88,7 @@ class LoginUser(LoginView):
     form_class = LoginForm
     template_name = "core/login.html"
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse_lazy("home")
 
 
@@ -113,7 +112,7 @@ class DownloadArchiveView(View):
     def get(self, request: HttpRequest, record_id: int) -> HttpResponse:
         record = UploadRecord.objects.get(id=record_id, user=request.user)
 
-        folder_path = record.folder_address
+        folder_path = Path(record.folder_address)
         if not Path.exists(folder_path):
             msg = "Folder does not exist"
             raise Http404(msg)
@@ -124,10 +123,11 @@ class DownloadArchiveView(View):
         temp_archive.close()
 
         # Отправляем архив пользователю
-        response = HttpResponse(open(temp_archive.name + ".zip", "rb").read(), content_type="application/zip")
+        with Path(temp_archive.name + ".zip").open("rb") as file:
+            response = HttpResponse(file.read(), content_type="application/zip")
         response["Content-Disposition"] = f'attachment; filename="{record.filename}.zip"'
 
         # Удаляем временный архивный файл
-        os.remove(temp_archive.name + ".zip")
+        Path(temp_archive.name + ".zip").unlink()
 
         return response
