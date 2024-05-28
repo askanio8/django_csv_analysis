@@ -1,17 +1,20 @@
-{% extends 'core/base.html' %}
-{% block graphs %}
-    <div class="container-fluid min-vh-100 d-flex flex-column justify-content-center align-items-center">
-        <form method="post" class="mt-3 w-50">
-            {% csrf_token %}
-            <div class="form-error">{{ form.non_field_errors }}</div>
-            {% for f in form %}
-                <div class="form-group mb-3">
-                    <label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>
-                    {{ f }}
-                    <div class="form-error text-danger">{{ f.errors }}</div>
-                </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-sm btn-outline-secondary">Login</button>
-        </form>
+{% extends 'core/base.html' %} {% block graphs %}
+<div
+  class="container-fluid min-vh-100 d-flex flex-column justify-content-center align-items-center"
+>
+  <form method="post" class="mt-3 w-50">
+    {% csrf_token %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    {% for f in form %}
+    <div class="form-group mb-3">
+      <label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>
+      {{ f }}
+      <div class="form-error text-danger">{{ f.errors }}</div>
     </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-sm btn-outline-secondary">
+      Login
+    </button>
+  </form>
+</div>
 {% endblock %}

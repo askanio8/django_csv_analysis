@@ -93,7 +93,3 @@ allow-dict-calls-with-keyword-arguments = true
     # Mutable class attributes should be annotated with `typing.ClassVar`.
     "RUF012",
 ]
-
-[tool.djlint]
-# H006: img must have width and height attributes
-ignore="H006"
