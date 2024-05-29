@@ -8,5 +8,5 @@ django_csv_analysis/asgi.py
 !django_csv_analysis/
 !core/
 !.env.example
-!db.sqlite3
 !templates/
+!media/

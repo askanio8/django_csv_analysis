@@ -21,11 +21,8 @@ COPY --chown=${USER} ./Makefile Makefile
 COPY --chown=${USER} ./manage.py manage.py
 COPY --chown=${USER} ./django_csv_analysis django_csv_analysis
 COPY --chown=${USER} ./core core
-COPY --chown=${USER} ./db.sqlite3 db.sqlite3
 COPY --chown=${USER} ./.env.example .env
 COPY --chown=${USER} ./templates /wd/templates
-
+COPY --chown=${USER} ./media /wd/media
 
 USER ${USER}
-
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
