@@ -5,3 +5,8 @@ django_csv_analysis/asgi.py
 !manage.py
 !requirements.txt
 !Makefile
+!django_csv_analysis/
+!core/
+!.env.example
+!db.sqlite3
+!templates/

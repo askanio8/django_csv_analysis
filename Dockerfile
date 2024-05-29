@@ -17,17 +17,15 @@ COPY --chown=${USER} requirements.txt requirements.txt
 RUN pip install --upgrade pip && \
     pip install --requirement requirements.txt
 
-COPY --chown=${USER} --chmod=555 ./docker/app/entrypoint.sh /entrypoint.sh
-COPY --chown=${USER} --chmod=555 ./docker/app/start.sh /start.sh
-COPY --chown=${USER} --chmod=555 ./docker/app/celery_worker_start.sh /celery_worker_start.sh
-
 COPY --chown=${USER} ./Makefile Makefile
 COPY --chown=${USER} ./manage.py manage.py
+COPY --chown=${USER} ./django_csv_analysis django_csv_analysis
 COPY --chown=${USER} ./core core
-COPY --chown=${USER} ./apps apps
+COPY --chown=${USER} ./db.sqlite3 db.sqlite3
+COPY --chown=${USER} ./.env.example .env
+COPY --chown=${USER} ./templates /wd/templates
+
 
 USER ${USER}
 
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["/start.sh"]
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
