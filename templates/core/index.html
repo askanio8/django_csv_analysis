@@ -28,6 +28,7 @@
     >
       Create report
     </button>
+    {% if graphs_list %}
     <div class="btn-group me-2" style="margin-left: 10px">
       <button
         type="button"
@@ -37,6 +38,12 @@
       >
         Previous
       </button>
+      <span
+        id="imageCounter"
+        class="btn btn-sm btn-outline-secondary counter"
+        style="margin: 0 10px"
+        >0(0)</span
+      >
       <button
         type="button"
         id="nextButton"
@@ -46,6 +53,7 @@
         Next
       </button>
     </div>
+    {% endif %}
   </div>
 </div>
 {% if graphs_list %}

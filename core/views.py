@@ -12,8 +12,6 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
 
-from django_csv_analysis import settings
-
 from .forms import LoginForm, RegisterForm
 from .models import UploadRecord
 from .tools.matplotlib_graphs import get_graphs
@@ -39,7 +37,7 @@ class MyView(View):
         table = table.to_numpy().tolist()
 
         graphs = get_graphs(uploaded_df)
-        graphs_list = [os.path.join(graphs, f) for f in os.listdir(graphs) if f.endswith(".png")]  # noqa:PTH118
+        graphs_list = [os.path.join(graphs, f) for f in os.listdir(graphs) if f.endswith(".png")]
 
         # Сохраняем DataFrame в сессии для последующего использования
         request.session["df"] = uploaded_df.to_json()
@@ -65,14 +63,14 @@ class MyView(View):
 
         uploaded_df = pd.read_json(df_json)
         ydata_html_path = get_html(uploaded_df)
-        relative_path = os.path.relpath(ydata_html_path, settings.MEDIA_ROOT)
-        report_url = f"/media/{relative_path}"
+        ydata_html_path = ydata_html_path.replace("\\", "/")
+        report_url = f"/media/{ydata_html_path}"
 
         # Обновляем запись в базе данных
         upload_record_id = request.session.get("upload_record_id")
         if request.user.is_authenticated and upload_record_id:
             upload_record = UploadRecord.objects.get(id=upload_record_id)
-            upload_record.file_address = relative_path
+            upload_record.file_address = ydata_html_path
             upload_record.save()
 
         return JsonResponse({"report_url": report_url})

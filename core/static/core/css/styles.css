@@ -95,3 +95,8 @@ table.table th,
 table.table td {
   background-color: #f4f7d8;
 }
+.counter {
+  display: inline-block;
+  width: 4rem;
+  text-align: right; /* Выравнивание текста по правому краю */
+}

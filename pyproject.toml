@@ -66,6 +66,8 @@ extend-ignore = [
     "DJ012",
     # Found commented-out code.
     "ERA001",
+    "PTH118",
+    "PTH103",
 ]
 
 task-tags = [
