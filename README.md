@@ -4,22 +4,22 @@
 
 ## CSV Analysis
 
-Homework related actions.
+Site related actions.
 
 ### ▶️ Run
 
-Make all actions needed for run homework from zero. Including configuration.
+Make all actions needed for run site from zero. Including configuration.
 
 ```shell
-make d-homework-i-run
+make d-site-i-run
 ```
 
 ### 🚮 Purge
 
-Make all actions needed for run homework from zero.
+Make all actions needed for run site from zero.
 
 ```shell
-make d-homework-i-purge
+make d-site-i-purge
 ```
 
 ---
@@ -36,7 +36,7 @@ make init-dev
 
 ### ⚙️ Configure
 
-Configure homework.
+Configure site.
 
 ```shell
 make init-configs

@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  app:
+    ports:
+      - "48000:8000"
+
+    user: "${UID-1000}"
+    env_file:
+      - .env
+
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+
+    volumes:
+      - ./media:/wd/media:rw
+
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  postgres:
+    ports:
+      - "45432:5432"

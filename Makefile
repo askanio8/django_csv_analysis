@@ -3,15 +3,15 @@ UID := $(shell id -u)
 # Note: Get env variables from .env file
 #include .env
 
-.PHONY: d-homework-i-run
-# Make all actions needed for run homework from zero.
-d-homework-i-run:
+.PHONY: d-site-i-run
+# Make all actions needed for run site from zero.
+d-site-i-run:
 	@make init-configs &&\
 	make d-run
 
-.PHONY: d-homework-i-purge
-# Make all actions needed for purge homework related data.
-d-homework-i-purge:
+.PHONY: d-site-i-purge
+# Make all actions needed for purge site related data.
+d-site-i-purge:
 	@make d-purge
 
 
@@ -57,11 +57,11 @@ init-dev:
 	@make poetry-install && \
 	pre-commit install
 
-.PHONY: homework-i-run
-# Run homework.
-homework-i-run:
-	@python main.py
+.PHONY: site-i-run
+# Run site.
+site-i-run:
+	@python manage.py runserver
 
-.PHONY: homework-i-purge
-homework-i-purge:
+.PHONY: site-i-purge
+site-i-purge:
 	@echo Goodbye
