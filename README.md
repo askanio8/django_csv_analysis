@@ -1,4 +1,4 @@
-# Django example application
+# Django site
 
 ---
 
