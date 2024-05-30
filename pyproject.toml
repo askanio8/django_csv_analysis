@@ -68,6 +68,7 @@ extend-ignore = [
     "ERA001",
     "PTH118",
     "PTH103",
+    "BLE001",
 ]
 
 task-tags = [

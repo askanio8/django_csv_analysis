@@ -30,14 +30,25 @@ class MyView(View):
         if not uploaded_file:
             return render(request, "core/base.html", {"error_message": "File upload failed."})
 
-        uploaded_df = pd.read_csv(uploaded_file)
+        try:
+            uploaded_df = pd.read_csv(uploaded_file)
+        except Exception:
+            return redirect("home")
 
-        table = get_table(uploaded_df)
-        columns = table.columns.tolist()
-        table = table.to_numpy().tolist()
+        try:
+            table = get_table(uploaded_df)
+            columns = table.columns.tolist()
+            table = table.to_numpy().tolist()
+        except Exception:
+            table = None
+            columns = None
 
-        graphs = get_graphs(uploaded_df)
-        graphs_list = [os.path.join(graphs, f) for f in os.listdir(graphs) if f.endswith(".png")]
+        try:
+            graphs = get_graphs(uploaded_df)
+            graphs_list = [os.path.join(graphs, f) for f in os.listdir(graphs) if f.endswith(".png")]
+        except Exception:
+            graphs_list = None
+            graphs = None
 
         # Сохраняем DataFrame в сессии для последующего использования
         request.session["df"] = uploaded_df.to_json()
@@ -61,8 +72,12 @@ class MyView(View):
         if df_json is None:
             return JsonResponse({"error": "No data found"}, status=404)
 
-        uploaded_df = pd.read_json(df_json)
-        ydata_html_path = get_html(uploaded_df)
+        try:
+            uploaded_df = pd.read_json(df_json)
+            ydata_html_path = get_html(uploaded_df)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=404)
+
         ydata_html_path = ydata_html_path.replace("\\", "/")
         report_url = f"/media/{ydata_html_path}"
 
