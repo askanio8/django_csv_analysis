@@ -9,7 +9,7 @@ services:
 
     volumes:
       - .:/django_csv_analysis
-      -
+
     depends_on:
       postgres:
         condition: service_healthy
