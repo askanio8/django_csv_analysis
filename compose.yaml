@@ -7,6 +7,9 @@ services:
   app:
     build: .
 
+    volumes:
+      - .:/django_csv_analysis
+      -
     depends_on:
       postgres:
         condition: service_healthy
@@ -38,5 +41,6 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - .:/django_csv_analysis
     depends_on:
       - app
