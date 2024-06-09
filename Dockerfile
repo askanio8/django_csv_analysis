@@ -23,6 +23,5 @@ COPY --chown=${USER} ./django_csv_analysis django_csv_analysis
 COPY --chown=${USER} ./core core
 COPY --chown=${USER} ./.env.example .env
 COPY --chown=${USER} ./templates /wd/templates
-COPY --chown=${USER} ./media /wd/media
 
 USER ${USER}

@@ -18,9 +18,7 @@ d-site-i-purge:
 .PHONY: init-configs
 # Configuration files initialization
 init-configs:
-	@cp .env.example .env &&\
-	cp compose.override.dev.yaml compose.override.yaml
-
+	@cp .env.example .env
 
 .PHONY: d-run
 # Just run

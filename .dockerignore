@@ -9,4 +9,3 @@ django_csv_analysis/asgi.py
 !core/
 !.env.example
 !templates/
-!media/
