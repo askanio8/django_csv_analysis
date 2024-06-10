@@ -114,7 +114,7 @@ class History(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         if not request.user.is_authenticated:
             return render(request, "core/login.html", {"error_message": "Please log in to view your history."})
-        upload_records = UploadRecord.objects.filter(user=request.user)
+        upload_records = UploadRecord.objects.filter(user=request.user).order_by('-uploaded_at')
 
         # Передаем записи в шаблон для отображения
         context = {"upload_records": upload_records}
