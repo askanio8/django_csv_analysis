@@ -1,75 +1,115 @@
-# Django CSV Analysis
+# Django CSV Analysis Setup Guide
 
-## Getting Started
+Follow these steps to set up Django CSV Analysis on your server.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+### Clone Repository
 
-### Prerequisites
+Clone the repository with the necessary branch:
 
-What things you need to install the software and how to install them?
+```bash
+git clone -b forawsec2 https://github.com/askanio8/django_csv_analysis.git
+cd django_csv_analysis/
+```
 
+### Install Dependencies
 
-sudo apt update sudo apt install python3 python3-pip python3-venv
+Install Python and necessary packages:
 
+```bash
+sudo apt update
+sudo apt install python3 python3-pip python3-venv
+```
 
-### Installing
+### Configure Environment Variables
+Copy the example environment file and edit it:
 
-A step by step series of examples that tell you how to get a development environment running.
+```bash
+cp .env.example .env
+nano .env
+# Update keys and addresses in .env as needed
+```
 
-1. Clone the repository:
+### Set Up Virtual Environment
+Create and activate a Python virtual environment:
 
-git clone https://github.com/askanio8/django_csv_analysis.git cd django_csv_analysis/
+```bash
+python3 -m venv myvenv
+source myvenv/bin/activate
+```
 
+### Install Django and Other Packages
+Install Django and required packages:
 
-2. Install the required packages:
+```bash
+pip install django setuptools pandas matplotlib django-environ gunicorn
+```
 
-cp .env.example .env nano .env
+### Configure Django Settings
+Edit Django settings to set Debug=False:
 
-Change keys and addresses in .env
-python3 -m venv myvenv source myvenv/bin/activate pip install django setuptools pandas matplotlib django-environ gunicorn
+```bash
+nano django_csv_analysis/settings.py
+# Change DEBUG=False in settings.py
+```
 
+### Database Migration
+Apply database migrations:
 
-3. Configure Django:
+```bash
+python manage.py migrate
+python manage.py collectstatic --noinput
+```
 
-nano /django_csv_analysis/settings.py
+# Run
+If using Gunicorn for production:
 
-Set Debug=False in settings.py
-python manage.py migrate python manage.py collectstatic --noinput
-
-
-## Running the Server
-
-### Using Gunicorn
-
-
+```bash
 gunicorn --workers 1 --bind 0.0.0.0:8000 django_csv_analysis.wsgi:application
+```
 
-
-### Without Gunicorn and without Nginx
-
-
+For development or without Gunicorn:
+```bash
 sudo /home/ubuntu/django_csv_analysis/myvenv/bin/python manage.py runserver 0.0.0.0:80
+```
 
-
-### With Nginx and without Gunicorn
-
-
+For development with nginx and without Gunicorn:
+```bash
 python manage.py runserver 0.0.0.0:8000
+```
 
+### Install and Configure Nginx
+Install Nginx and configure site:
 
-## Configuring Nginx
+```bash
+sudo apt install nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
 
-1. Install Nginx and start the service:
+# Configure Nginx site
+sudo cp django_csv_analysis.nginx.conf /etc/nginx/sites-available/django_csv_analysis
+sudo nano /etc/nginx/sites-available/django_csv_analysis
+# Update keys and addresses in django_csv_analysis
 
-sudo apt install nginx sudo systemctl start nginx sudo systemctl enable nginx
+# Link site configuration
+sudo ln -s /etc/nginx/sites-available/django_csv_analysis /etc/nginx/sites-enabled/
 
+# Test Nginx configuration and restart
+sudo nginx -t
+sudo systemctl restart nginx
+```
 
-2. Set up the Nginx configuration:
+### Set Up HTTPS with Certbot
+Install Certbot and configure HTTPS:
 
-sudo cp django_csv_analysis.nginx.conf /etc/nginx/sites-available/django_csv_analysis sudo cp nginx.conf /etc/nginx/nginx.conf sudo ln -s /etc/nginx/sites-available/django_csv_analysis /etc/nginx/sites-enabled/ sudo nginx -t sudo systemctl restart nginx
+```bash
+sudo apt install certbot python3-certbot-nginx
 
+# Obtain SSL certificate
+sudo certbot --nginx -d example.com
 
-## Authors
+# Update /etc/nginx/sites-available/django_csv_analysis for HTTPS
 
-* askanio8
-
+# Test Nginx configuration and restart
+sudo nginx -t
+sudo systemctl restart nginx
+```
