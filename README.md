@@ -107,9 +107,7 @@ Install Certbot and configure HTTPS:
 sudo apt install certbot python3-certbot-nginx
 
 # Obtain SSL certificate
-sudo certbot --nginx -d example.com
-
-# Update /etc/nginx/sites-available/django_csv_analysis for HTTPS
+sudo certbot --nginx -d
 
 # Test Nginx configuration and restart
 sudo nginx -t
