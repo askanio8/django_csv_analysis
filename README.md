@@ -75,6 +75,8 @@ sudo /home/ubuntu/django_csv_analysis/myvenv/bin/python manage.py runserver 0.0.
 For development with nginx and without Gunicorn:
 ```bash
 python manage.py runserver 0.0.0.0:8000
+# or
+nohup python3 manage.py runserver 0.0.0.0:8000 &
 ```
 
 ### Install and Configure Nginx
