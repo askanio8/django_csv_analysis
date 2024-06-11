@@ -16,17 +16,6 @@
             >Download Images</a
           >
         </td>
-        <td>
-          {% if record.file_address %}
-          <a
-            href="{{ record.file_address.url }}"
-            class="btn btn-sm btn-outline-secondary"
-            style="background-color: #c9ddc4"
-            target="_blank"
-            >View extended report</a
-          >
-          {% endif %}
-        </td>
       </tr>
       {% empty %}
       <tr>

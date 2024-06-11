@@ -20,14 +20,6 @@
     </label>
   </form>
   <div class="btn-toolbar mb-2 mb-md-0">
-    <button
-      type="button"
-      id="create-report-btn"
-      class="btn btn-sm btn-outline-secondary"
-      style="background-color: #c9ddc4"
-    >
-      Create report
-    </button>
     {% if graphs_list %}
     <div class="btn-group me-2" style="margin-left: 10px">
       <button
@@ -72,10 +64,8 @@
 </div>
 {% endif %}
 <script>
-  var createReportUrl = '{% url "generate_ydata_html" %}';
   var graphsList = {{ graphs_list|safe }};
 </script>
-<script src="{% static 'core/js/create_report.js' %}"></script>
 <script src="{% static 'core/js/graph_navigation.js' %}"></script>
 {% endblock %} {% block table %}
 <div class="table-responsive small">

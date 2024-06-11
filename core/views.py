@@ -16,7 +16,6 @@ from .forms import LoginForm, RegisterForm
 from .models import UploadRecord
 from .tools.matplotlib_graphs import get_graphs
 from .tools.stats import get_table
-from .tools.ydata_stats import get_html
 
 
 class MyView(View):
@@ -65,30 +64,6 @@ class MyView(View):
 
         context = {"table": table, "columns": columns, "graphs_list": graphs_list}
         return render(request, "core/index.html", context)
-
-    @staticmethod
-    def generate_ydata_html(request: HttpRequest) -> JsonResponse:
-        df_json = request.session.get("df")
-        if df_json is None:
-            return JsonResponse({"error": "No data found"}, status=404)
-
-        try:
-            uploaded_df = pd.read_json(df_json)
-            ydata_html_path = get_html(uploaded_df)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=404)
-
-        ydata_html_path = ydata_html_path.replace("\\", "/")
-        report_url = f"/media/{ydata_html_path}"
-
-        # Обновляем запись в базе данных
-        upload_record_id = request.session.get("upload_record_id")
-        if request.user.is_authenticated and upload_record_id:
-            upload_record = UploadRecord.objects.get(id=upload_record_id)
-            upload_record.file_address = ydata_html_path
-            upload_record.save()
-
-        return JsonResponse({"report_url": report_url})
 
 
 class RegisterUser(CreateView):

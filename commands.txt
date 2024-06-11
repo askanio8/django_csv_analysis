@@ -1,0 +1,31 @@
+sudo apt update
+git clone https://github.com/askanio8/django_csv_analysis.git
+cd django_csv_analysis/
+sudo apt install python3 python3-pip
+sudo apt install python3-venv
+cp .env.example .env
+nano .env
+#need to change keys and addresses in .env
+python3 -m venv myvenv
+source myvenv/bin/activate
+pip install django setuptools pandas matplotlib django-environ gunicorn
+nano /django_csv_analysis/settings.py
+# change Debug=False in settings.py
+python manage.py migrate
+python manage.py collectstatic --noinput
+
+#for gunicorn 
+gunicorn --workers 1 --bind 0.0.0.0:8000 django_csv_analysis.wsgi:application
+# without gunicorn and without nginx
+sudo /home/ubuntu/django_csv_analysis/myvenv/bin/python manage.py runserver 0.0.0.0:80
+# with nginx and without gunicorn
+python manage.py runserver 0.0.0.0:8000
+
+sudo apt install nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
+sudo cp django_csv_analysis.nginx.conf /etc/nginx/sites-available/django_csv_analysis
+sudo cp nginx.conf /etc/nginx/nginx.conf
+sudo ln -s /etc/nginx/sites-available/django_csv_analysis /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx

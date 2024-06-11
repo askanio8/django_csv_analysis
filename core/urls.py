@@ -11,7 +11,6 @@ urlpatterns = [
     path("history/", History.as_view(), name="history"),
     path("register/", RegisterUser.as_view(), name="register"),
     path("download-archive/<int:record_id>/", DownloadArchiveView.as_view(), name="download_archive"),
-    path("generate-html/", MyView.generate_ydata_html, name="generate_ydata_html"),
 ]
 
 if settings.DEBUG:

@@ -35,7 +35,7 @@ SECRET_KEY = env.str(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = env.list("DJANGO__ALLOWED_HOSTS", default=[])
 
@@ -87,13 +87,7 @@ WSGI_APPLICATION = "django_csv_analysis.wsgi.application"
 
 DATABASES = {
     "default": env.db_url_config(
-        #f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        # PostgreSQL url format: postgres://USER:PASSWORD@HOST:PORT/NAME
-         env.str(
-            "DJANGO__DATABASE_URL",
-            f"postgres://{env.str('POSTGRES_USER')}:{env.str('POSTGRES_PASSWORD')}@"
-            f"{env.str('POSTGRES_HOST')}:{env.int('POSTGRES_PORT')}/{env.str('POSTGRES_DB')}",
-         ),
+        f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
     ),
 }
 
